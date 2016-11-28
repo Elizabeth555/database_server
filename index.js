@@ -5,21 +5,27 @@ var bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+
+var data = []
+
 app.get('/', function(req, res){
-  res.send('Hello World')
+  res.json(data)
 });
 
 
-app.get('/set*', function(req, res){
-  var key = req.query.key;
+app.get('/set?:value', function(req, res){
+  var obj = {key: req.query.value};
+  data.push(obj);
+  res.json(obj);
+  console.log(data)
 
-
-  res.send(key)
 });
 
-app.get('/get?', function(req, res){
-  res.json({ key : req.params.key,
-            value: req.query.value});
+app.get('/get?:key', function(req, res){
+
+  var k  = data[req.query.key];
+  res.json(k);
+
 });
 
 app.listen(3000, function(){
